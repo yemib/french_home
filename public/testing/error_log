@@ -1,0 +1,1 @@
+[30-Apr-2020 18:03:16 UTC] PHP Recoverable fatal error:  Object of class PDO could not be converted to string in /home2/frenchvi/public_html/testing/db.php on line 16

@@ -1,0 +1,10 @@
+.admin-bg{
+	background-image:url(../img/logo1.jpg);
+	background-repeat: round; 
+}
+.login-form{
+	margin-top: 50px!important;
+}
+.fr-element{
+	height: 210px!important;
+}
