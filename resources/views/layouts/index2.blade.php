@@ -5,6 +5,7 @@
 use Tutorialspoint\page;
 use Tutorialspoint\contact_detail;
 use Tutorialspoint\logos;
+use Tutorialspoint\Menu;
 
 $pages = page::where('publish', 'yes')->paginate(6);
 
@@ -32,10 +33,10 @@ $logo  = logos::first();
 
 
 
-	<link rel="alternate" type="application/rss+xml" title="" href="feed/">
+	<link rel="alternate" type="application/rss+xml" href="feed/">
 
 
-	<link rel="alternate" type="application/rss+xml" title="" href="">
+	<link rel="alternate" type="application/rss+xml" href="">
 
 
 	<script type="text/javascript">
@@ -857,7 +858,10 @@ $logo  = logos::first();
 			}
 		</style>
 	</noscript>
-
+	<!-- Swiper CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+	<!-- Swiper JS -->
+	<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 
 </head>
@@ -878,14 +882,20 @@ $logo  = logos::first();
 
 
 
-		<?php if (session('error')) {   ?>
-			<script>
-				alert('error okay')
-			</script>
+		<?php
 
-		<?php  } ?>
+		$menus = Menu::whereNull('parent_id')
+			->where('is_active', true)
+			->orderBy('order')
+			->with(['children' => function ($q) {
+				$q->where('is_active', true)
+					->orderBy('order')
+					->with('children');
+			}])
+			->get();
+		?>
 
-		@include('menu2')
+		@include('menu.menu2')
 
 
 
@@ -903,6 +913,8 @@ $logo  = logos::first();
 
 					@yield('content')
 
+
+
 				</div>
 
 				<!-- .row -->
@@ -919,22 +931,34 @@ $logo  = logos::first();
 					</div>
 					<div class="col-md-6 col-sm-12 col-xs-12 text-right">
 						<div class="socials footer-social">
+							@if( !empty($contact->facebook) && $contact->facebook != " " && $contact->facebook != Null)
 
 							<a href="<?php echo  $contact->facebook;   ?>" target="_blank"><i class="fa fa-facebook"></i></a>
+							@endif
+
+							@if( !empty($contact->twitter) && $contact->twitter != " " && $contact->twitter != Null)
+
+							<a href="{!! $contact->twitter !!}" target="_blank"><i class="fa fa-twitter"></i></a>
+
+							@endif
+
+							@if( !empty($contact->youtube) && $contact->youtube != " " && $contact->youtube != Null)
+
+							<a href="{!! $contact->youtube !!}" target="_blank">
 
 
-							<!----
-			<a href="/https://twitter.com/coop" target="_blank"><i class="fa fa-twitter"></i></a>
-			
-			<a href="/https://www.youtube.com/channel/UCBTSjSd6463WxRQal8pqklw" target="_blank">
-			
-			
-			<i class="fa fa-youtube"></i></a>
-			
-			
-			
-			<a href="/https://www.instagram.com/" target="_blank"><i class="fa fa-instagram"></i></a>	
-			---->
+								<i class="fa fa-youtube"></i></a>
+
+
+							@endif
+
+
+							@if( !empty($contact->instagram) && $contact->instagram != " " && $contact->instagram != Null)
+
+							<a href="{!! $contact->instagram !!}" target="_blank"><i class="fa fa-instagram"></i></a>
+
+							@endif
+
 
 						</div>
 					</div>
@@ -965,271 +989,9 @@ $logo  = logos::first();
 		</a>
 
 
-		<ul id="menu-top" class="menu">
+		@include('menu.mobilemenu')
 
 
-
-
-
-
-			<li> <a style="" href="/"> HOME </a> </li>
-
-
-			<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-76"> <a style="cursor: pointer" title="">About Us</a>
-
-
-
-				<ul class="sub-menu">
-					<li class="menu-back">Back</li>
-					<li class="menu-parent-items">About Us</li>
-
-
-					<li class="active"><a href="/page/5/history" title="">Our History</a></li>
-
-
-
-
-
-				</ul>
-				<!-- /.sub-menu -->
-			</li>
-
-
-			<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-77"> <a style="cursor: pointer" title="">Admission / Registration </a>
-				<ul class="sub-menu">
-					<li class="menu-back">Back</li>
-					<li class="menu-parent-items">Admission / Registration</li>
-
-					<li class="active"><a href="http://www.portal.frenchvillage.edu.ng/register" title="">Application Form </a></li>
-					<li><a href="http://www.portal.frenchvillage.edu.ng/login" title="">NFLV Portal</a></li>
-
-
-
-
-				</ul>
-				<!-- /.sub-menu -->
-			</li>
-
-
-
-
-			<li> <a href="http://www.portal.frenchvillage.edu.ng/paynow" class="">Pay Tuition </a> </li>
-
-
-			<li> <a href="http://www.portal.frenchvillage.edu.ng/confirm_registration_code" class="">Confirm Registration Payment </a> </li>
-
-
-
-			<li> <a href="http://www.portal.frenchvillage.edu.ng/confirmpayment" class="">Check Payment Status </a> </li>
-
-
-			<li> <a href="/event">EVENT </a> </li>
-
-
-			<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-77">
-
-				<a style="cursor: pointer" title="">Programmes</a>
-
-
-				<ul class="sub-menu">
-
-					<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-77"> <a> Language Immersion Programme (LIP) </a>
-
-						<ul class="sub-menu">
-
-
-
-							<li><a href="/page/10/Universities" title="">Universities</a></li>
-
-
-							<li><a href="/page/11/Colledge_of_Education" title="">College of Education </a></li>
-
-
-						</ul>
-
-
-					</li>
-
-
-					<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-77"> <a style="cursor: pointer"> FSP/CONSULT Programmes</a>
-
-						<ul class="sub-menu">
-
-
-
-							<li><a href="/page/12/Diploma" title="">Diploma(One Year) </a></li>
-
-							<li><a href="/page/13/Module" title=""> Module (Three Month)</a></li>
-
-
-							<li><a href="/page/14/Evening_Programme" title=""> Evening Programme</a></li>
-
-
-							<li><a href="/page/15/Weekend_Programme" title=""> Weekend Programme</a></li>
-
-
-							<li><a href="/page/26/Summer_Holiday_Camp" title=""> Summer Holiday Camp (For Secondary Schools)</a></li>
-
-
-							<li><a href="/page/27/Easter_Holiday_Camp" title=""> Easter Holiday Camp(in the West Coast)</a></li>
-
-
-							<li><a href="/page/28/Easter_Holiday_Camp" title=""> Teachers Workshop</a></li>
-
-
-							<li><a style="font-size: 12px" href="/page/29/Other_customised_programme" title=""> Other customised programme </a></li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-						</ul>
-
-					</li>
-
-
-
-
-
-
-
-					<!--- <li><a href="" title="">News Letter</a></li> ---->
-				</ul>
-				<!-- /.sub-menu -->
-			</li>
-
-			<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-77"> <a style="cursor: pointer" title="">Department</a>
-				<ul class="sub-menu">
-
-
-
-					<li><a href="/department/18/directors" title="">Principal Officers</a></li>
-
-
-
-
-
-					<li><a href="/department/19/directorate" title="">Directorate</a></li>
-
-
-
-					<li><a href="/department/20/academics" title="">Academic</a></li>
-
-					<li><a href="/department/21/bursary" title="">Bursary</a></li>
-
-
-
-
-
-					<li><a href="/department/22/library" title="">Library</a></li>
-
-
-
-					<li><a href="/department/23/registry" title="">Registry</a></li>
-
-
-
-					<li><a href="/department/24/health" title="">Health Services</a></li>
-
-
-					<li><a href="/department/25/work" title="">Work &amp; Services </a></li>
-					<!--- <li><a href="" title="">News Letter</a></li> ---->
-				</ul>
-				<!-- /.sub-menu -->
-			</li>
-
-
-
-
-			<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-77"> <a style="cursor: pointer" title="">Resources</a>
-				<ul class="sub-menu">
-
-					<li><a href="{{ asset('resources/Teaching Resources-NFLV.pdf')  }}" title="">Teaching Resources</a></li>
-					<li><a href="/page/9/Anthem" title="">Village Anthem</a></li>
-					<!--- <li><a href="" title="">News Letter</a></li> ---->
-				</ul>
-				<!-- /.sub-menu -->
-			</li>
-
-
-
-
-
-
-			<li> <a href="http://www.portal.frenchvillage.edu.ng/login"> Eportal </a> </li>
-
-			<li> <a href="https://frenchvillage.edu.ng:2096/" style="" title=""> Webmail </a> </li>
-
-
-
-			<li> <a href="/gallery_view" style="" title=""> Gallery </a> </li>
-
-			<li> <a href="/page/16/faq" style="" title=""> FAQ </a> </li>
-
-
-
-
-
-
-
-
-
-		</ul>
-
-
-		<!---
-		<ul id="menu-top" class="menu">
-		
-		<li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-2610 current_page_item menu-item-2668"><a href="">Home</a></li>
-		
-		
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-76">
-
-<span class="toggle-children "><i class="fa fa-angle-right" aria-hidden="true"></i></span><a href="about-us/" class="dropdown-toggle">About Us</a>
-
-
-
-<ul class="sub-menu"><li class="menu-back">Back</li><li class="menu-parent-items">About Us</li>
-	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2739"><a href="organisations-profile/" class="dropdown-toggle">Organisation’s Profile</a></li>
-	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-32"><a href="origin-and-early-history/" class="dropdown-toggle">Brief History</a></li>
-	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-35"><a href="our-vision/" class="dropdown-toggle">Our Vision</a></li>
-	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-34"><a href="our-mission/" class="dropdown-toggle">Our Mission</a></li>
-	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-47"><a href="pic-members/" class="dropdown-toggle">PIC Members</a></li>
-	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-66"><a href="pic-board/" class="dropdown-toggle">Board Members</a></li>
-</ul>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-33"><a href="our-services/">Our Services</a></li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-73"><a target="_blank" href="/http://apex.oracle.com/pls/apex/f?p=9000000:1001:0:::::">CoopCount</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-132"><a href="coop-unionssocieties/">Coop Unions</a></li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-431"><span class="toggle-children "><i class="fa fa-angle-right" aria-hidden="true"></i></span><a href="/#" class="dropdown-toggle">Media</a>
-<ul class="sub-menu"><li class="menu-back">Back</li><li class="menu-parent-items">Media</li>
-	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-92"><a href="photo-gallery/" class="dropdown-toggle">Photo Gallery</a></li>
-	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-430"><a href="video-gallery/" class="dropdown-toggle">Video Gallery</a></li>
-	<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-435"><a href="resource-links/" class="dropdown-toggle">Resource Links</a></li>
-	<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-425"><a href="category/latest-news/" class="dropdown-toggle">Latest News</a></li>
-</ul>
-</li>
-<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-464"><span class="toggle-children "><i class="fa fa-angle-right" aria-hidden="true"></i></span><a href="/#" class="dropdown-toggle">Publications</a>
-<ul class="sub-menu"><li class="menu-back">Back</li><li class="menu-parent-items">Publications</li>
-	<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-434"><a href="category/speeches/" class="dropdown-toggle">Speeches</a></li>
-	<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-433"><a href="category/cooplight-news/" class="dropdown-toggle">Cooplight News</a></li>
-	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2779"><a target="_blank" href="_Cooperatives-Societies-Law.pdf" class="dropdown-toggle">By-law</a></li>
-</ul>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2726"><a href="information-on-formation-of-a-cooperative-society/">Form A Coop</a></li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-31"><a href="contact-us/">Contact Us</a></li>
-</ul>
-		
-		---->
 
 	</div>
 
@@ -1321,31 +1083,136 @@ $logo  = logos::first();
 
 
 
+
 	<script>
-		$('.owl-carousel').owlCarousel({
-			rtl: false,
+		$('.owl-carousel2').owlCarousel({
 			loop: true,
-			margin: 10,
+			autoplay: true,
+			autoplayTimeout: 4000,
+			autoplayHoverPause: true,
 			nav: true,
+			dots: false,
+			smartSpeed: 600,
+			margin: 200, // adds clean spacing between wider cards
+
 			responsive: {
 				0: {
-					items: 1
+					items: 1 // mobile = full width
 				},
-				600: {
-					items: 3
+				768: {
+					items: 1 // tablet = still wide
 				},
-				1000: {
-					items: 5
+				1024: {
+					items: 2 // desktop = wider cards
+				},
+				1400: {
+					items: 3 // large screens only
 				}
 			}
-		})
+		});
 	</script>
+
 
 
 	<script src="/asset_files/bootstrap.js"></script>
 	<div id="wp-a11y-speak-polite" role="status" aria-live="polite" aria-relevant="additions text" aria-atomic="true" class="screen-reader-text wp-a11y-speak-region"></div>
 	<div id="wp-a11y-speak-assertive" role="alert" aria-live="assertive" aria-relevant="additions text" aria-atomic="true" class="screen-reader-text wp-a11y-speak-region"></div>
 </body>
+
+@yield('styles')
+
+
+
+<style>
+	.vm-modal {
+		position: fixed;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.65);
+		display: none;
+		align-items: center;
+		justify-content: center;
+		z-index: 9999;
+	}
+
+	/* Modal container */
+	.vm-modal-content {
+		background: #ffffff;
+		width: 90%;
+		max-width: 650px;
+		max-height: 85vh;
+		/* KEY */
+		border-radius: 18px;
+		padding: 30px;
+		display: flex;
+		flex-direction: column;
+		/* KEY */
+		position: relative;
+	}
+
+	/* Scrollable content */
+	.vm-modal-body {
+		overflow-y: auto;
+		/* KEY */
+		margin-top: 15px;
+		padding-right: 10px;
+		/* space for scrollbar */
+	}
+
+	/* Optional: nice scrollbar */
+	.vm-modal-body::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	.vm-modal-body::-webkit-scrollbar-thumb {
+		background: #bbb;
+		border-radius: 4px;
+	}
+
+	.vm-close {
+		position: absolute;
+		top: 18px;
+		right: 22px;
+		font-size: 22px;
+		cursor: pointer;
+	}
+</style>
+
+
+<div class="vm-modal" id="vmModal">
+	<div class="vm-modal-content">
+		<span class="vm-close">&times;</span>
+
+		<h3 id="vmModalTitle"></h3>
+
+		<div class="vm-modal-body" id="vmModalBody">
+			<!-- long content goes here -->
+		</div>
+	</div>
+</div>
+
+
+
+<script>
+	const modal = document.getElementById("vmModal");
+	const modalTitle = document.getElementById("vmModalTitle");
+	const modalBody = document.getElementById("vmModalBody");
+	const closeBtn = document.querySelector(".vm-close");
+
+	document.querySelectorAll(".read-more-btn").forEach(btn => {
+		btn.addEventListener("click", () => {
+			modalTitle.innerText = btn.dataset.title;
+			modalBody.innerHTML = btn.dataset.content;
+			modal.style.display = "flex";
+		});
+	});
+
+	closeBtn.onclick = () => modal.style.display = "none";
+	window.onclick = e => {
+		if (e.target === modal) modal.style.display = "none";
+	};
+</script>
+
+
 
 </html>
 <!-- Dynamic page generated in 0.395 seconds. -->

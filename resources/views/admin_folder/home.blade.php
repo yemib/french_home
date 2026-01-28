@@ -57,7 +57,7 @@ $pages  = page::get();
               </div>
 
               <!-- Latest Users -->
-              <div class="panel panel-default">
+              <div  style="display: none;" class="panel panel-default">
                 <div class="panel-heading">
                   <h3 class="panel-title">Admin Details</h3>
                 </div>
@@ -65,14 +65,14 @@ $pages  = page::get();
                   <table class="table table-striped table-hover">
                       <tr>
                         <th>Username</th>
-                        <th>Password</th>
+                       <!--  <th>Password</th> -->
                       
                       </tr>
                       
                       <?php    foreach($admins  as $admins  )   {?> 
                       <tr>
                         <td>{{   $admins->username }}</td>
-                        <td>  {{   $admins->password }}</td>
+                        <!-- <td>  {{   $admins->password }}</td> -->
                         
                     
                       </tr>

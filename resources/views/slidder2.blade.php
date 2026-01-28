@@ -201,13 +201,17 @@ $select_slide2  = slidders::where('publish', 'yes')->get()
 
                             <div class="slider-bg"
                               style="background-image:url('{{$slidder->image}}')">
+
+                              
+                          
                             </div>
 
 
-
                             <div class="carousel-caption">
+                               
                               <h3>{{ $slidder->text1  }}</h3>
                               <p>{{ $slidder->text2  }}</p>
+                             
                             </div>
                           </div>
 

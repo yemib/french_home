@@ -16,10 +16,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Route;
 use Tutorialspoint\admins;
-
-
-
-
+use Tutorialspoint\gallery;
+use Tutorialspoint\Http\Controllers\JournalController;
+use Tutorialspoint\Menu;
 
 Route::get('event', function () {
 
@@ -30,6 +29,8 @@ Route::get('event', function () {
 
 
 Route::get('/',  function () {
+	 
+
 	return  view('home2');
 });
 
@@ -111,7 +112,9 @@ Route::get('newsletter/{id}/{name}',  function ($id, $name) {
 
 
 Route::get('/gallery_view',  function () {
-	return  view('gallery');
+
+	    $galleries = gallery::where('publish', 'yes')->latest()->paginate(9);
+	return  view('gallery')->with('galleries', $galleries);
 });
 
 
@@ -224,3 +227,47 @@ Route::post('/large_file',  function (Request $request) {
 		]);
 	}
 })->middleware('article');
+
+
+
+//journal routes  
+
+// routes/web.php
+
+Route::get('/journals', "HomeJournal@journals")->name('home.journals.journals');
+Route::get('/admins/journals', "JournalController@index")->name('admin.journals.index');
+Route::get('/admins/journals/list', "JournalController@list")->name('admin.journals.list');
+Route::post('/admins/journals/store', "JournalController@store")->name('admin.journals.store');
+Route::post('/admins/journals/update/{id}', "JournalController@update")->name('admin.journals.update');
+Route::delete('/admins/journals/delete/{id}', "JournalController@destroy")->name('admin.journals.destroy');
+Route::post('/admins/journals/toggle/{id}', "JournalController@togglePublish")->name('admin.journals.toggle');
+Route::post('/admins/journals/reorder', "JournalController@reorder")->name('admin.journals.reorder');
+Route::post('/admins/journals/update/{id}', "JournalController@update")->name('admin.journals.update');
+Route::get('/admins/journals/download/{id}', "JournalController@download")->name('admin.journals.download');
+
+/* menu routes */
+
+
+
+Route::get('/admins/menus', 'MenuController@index')->name('admin.menus.index');
+Route::get('/admins/menus/list', 'MenuController@list')->name('admin.menus.list');
+
+Route::post('/admins/menus/store', 'MenuController@store')->name('admin.menus.store');
+Route::post('/admins/menus/update/{id}', 'MenuController@update')->name('admin.menus.update');
+
+Route::post('/admins/menus/order', 'MenuController@updateOrder')->name('admin.menus.order');
+Route::post('/admins/menus/toggle/{id}', 'MenuController@toggle')->name('admin.menus.toggle');
+
+Route::delete('/admins/menus/{id}', 'MenuController@destroy')->name('admin.menus.destroy');
+
+
+
+Route::get('/admins/sections', "SectionController@index")->name('admin.sections.index');
+Route::get('/admins/sections/list', "SectionController@list")->name('admin.sections.list');
+Route::post('/admins/sections/store', "SectionController@store")->name('admin.sections.store');
+Route::post('/admins/sections/update/{id}', "SectionController@update")->name('admin.sections.update');
+Route::delete('/admins/sections/delete/{id}', "SectionController@destroy")->name('admin.sections.destroy');
+Route::post('/admins/sections/toggle/{id}', "SectionController@togglePublish")->name('admin.sections.toggle');
+Route::post('/admins/sections/reorder', "SectionController@reorder")->name('admin.sections.reorder');
+Route::post('/admins/sections/update/{id}', "SectionController@update")->name('admin.sections.update');
+

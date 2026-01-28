@@ -54,7 +54,8 @@ class slidder extends Controller
 		$service->publish  =(isset($request->publish) ) ?  $request->publish  :  'no' ;
 		$service->text1  =($request->text1 != '' ) ?  $request->text1 :  ' ' ;
 		$service->text2  =($request->text2  != '' ) ?  $request->text2  :  ' ' ;
-		
+        $service->url  =($request->url  != '' ) ?  $request->url  :  ' ' ;
+
 		if($request->image  != ''){  
 			
 			$image = $request->file('picture');
@@ -123,6 +124,7 @@ class slidder extends Controller
 		
 		$service->text1  =($request->text1 != '' ) ?  $request->text1 :  ' ' ;
 		$service->text2  =($request->text2  != '' ) ?  $request->text2  :  ' ' ;
+        $service->url  =($request->url  != '' ) ?  $request->url  :  ' ' ;
 		
 			
 	
